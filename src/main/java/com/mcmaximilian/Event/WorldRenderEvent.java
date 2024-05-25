@@ -1,6 +1,7 @@
 package com.mcmaximilian.Event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +14,11 @@ import static com.mcmaximilian.Keybinds.ESPState;
 public class WorldRenderEvent {
 
 
+    /**
+     * URL: https://github.com/vepexlegit/PlayerESP
+     * made box with EntityPosition
+     */
+    @SuppressWarnings("JavadocLinkAsPlainText")
     @SubscribeEvent
     public void worldRenderEvent( RenderWorldLastEvent event) {
 
@@ -26,8 +32,33 @@ public class WorldRenderEvent {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         for (Entity entity : Minecraft.getMinecraft().theWorld.getLoadedEntityList() ) {
-            if (entity == Minecraft.getMinecraft().thePlayer) {
-                continue;
+            if ( entity instanceof EntityPlayer ) {
+                double x = entity.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX;
+                double y = entity.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY;
+                double z = entity.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ;
+                GL11.glColor4f(0.0F, 1.0F, 0.0F, 1.0F);
+                GL11.glBegin(GL11.GL_LINE_LOOP);
+                GL11.glVertex3d(x - 0.5, y, z - 0.5);
+                GL11.glVertex3d(x - 0.5, y + 1.8, z - 0.5);
+                GL11.glVertex3d(x + 0.5, y + 1.8, z - 0.5);
+                GL11.glVertex3d(x + 0.5, y, z - 0.5);
+                GL11.glEnd();
+                GL11.glBegin(GL11.GL_LINE_LOOP);
+                GL11.glVertex3d(x - 0.5, y, z + 0.5);
+                GL11.glVertex3d(x - 0.5, y + 1.8, z + 0.5);
+                GL11.glVertex3d(x + 0.5, y + 1.8, z + 0.5);
+                GL11.glVertex3d(x + 0.5, y, z + 0.5);
+                GL11.glEnd();
+                GL11.glBegin(GL11.GL_LINES);
+                GL11.glVertex3d(x - 0.5, y, z - 0.5);
+                GL11.glVertex3d(x - 0.5, y, z + 0.5);
+                GL11.glVertex3d(x - 0.5, y + 1.8, z - 0.5);
+                GL11.glVertex3d(x - 0.5, y + 1.8, z + 0.5);
+                GL11.glVertex3d(x + 0.5, y + 1.8, z - 0.5);
+                GL11.glVertex3d(x + 0.5, y + 1.8, z + 0.5);
+                GL11.glVertex3d(x + 0.5, y, z - 0.5);
+                GL11.glVertex3d(x + 0.5, y, z + 0.5);
+                GL11.glEnd();
             }
             if ( ! (entity instanceof EntityLiving ) ) {
                 continue;

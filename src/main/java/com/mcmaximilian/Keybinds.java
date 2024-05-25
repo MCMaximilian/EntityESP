@@ -6,7 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 public class Keybinds {
 
-    public static KeyBinding ToggleESP = new KeyBinding( "entityesp.key.toggleESP", Keyboard.KEY_J , "key.categories.entityesp");
+    public static KeyBinding ToggleESP = new KeyBinding( "entityesp.key.toggleESP", Keyboard.KEY_ESCAPE , "key.categories.entityesp");
 
     public static String ESPState = "off" ;
 
