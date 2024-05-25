@@ -4,7 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.village.Village;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
@@ -33,6 +36,9 @@ public class WorldRenderEvent {
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         for (Entity entity : Minecraft.getMinecraft().theWorld.getLoadedEntityList() ) {
             if ( entity instanceof EntityPlayer ) {
+                if ( entity == Minecraft.getMinecraft().thePlayer ) {
+                    continue;
+                }
                 double x = entity.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX;
                 double y = entity.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY;
                 double z = entity.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ;
@@ -59,6 +65,9 @@ public class WorldRenderEvent {
                 GL11.glVertex3d(x + 0.5, y, z - 0.5);
                 GL11.glVertex3d(x + 0.5, y, z + 0.5);
                 GL11.glEnd();
+            }
+            if ( entity instanceof EntityVillager) {
+                continue;
             }
             if ( ! (entity instanceof EntityLiving ) ) {
                 continue;

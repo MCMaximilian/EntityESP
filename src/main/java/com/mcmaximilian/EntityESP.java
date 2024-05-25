@@ -19,13 +19,15 @@ public class EntityESP
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        MinecraftForge.EVENT_BUS.register( new KeyInputEvent() );
-        MinecraftForge.EVENT_BUS.register( new com.mcmaximilian.Event.WorldRenderEvent() );
+
     }
 
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         registerKey();
+
+        MinecraftForge.EVENT_BUS.register( new KeyInputEvent() );
+        MinecraftForge.EVENT_BUS.register( new WorldRenderEvent());
     }
 }
