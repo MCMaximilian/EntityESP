@@ -1,0 +1,16 @@
+[
+{
+  "modid": "EntityESP",
+  "name": "EntityESP 1.0",
+  "description": "EntityESP",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["MCMaximilian"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
