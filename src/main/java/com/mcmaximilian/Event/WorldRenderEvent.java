@@ -1,13 +1,10 @@
 package com.mcmaximilian.Event;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.village.Village;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
@@ -34,11 +31,22 @@ public class WorldRenderEvent {
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        for (Entity entity : Minecraft.getMinecraft().theWorld.getLoadedEntityList() ) {
-            if ( entity instanceof EntityPlayer ) {
+
+        for (Entity entity : Minecraft.getMinecraft().theWorld.getLoadedEntityList() ) { //TODO: 모든 loading된 entity를 불러오는 class
+
+            if ( entity instanceof EntityPlayer ) { //TODO: player인 경우
+
                 if ( entity == Minecraft.getMinecraft().thePlayer ) {
                     continue;
                 }
+                if (!entity.isEntityAlive()) {
+                    continue;
+                }
+                if ( entity.isInvisible()) {
+                    continue;
+                }
+                //TODO: 이 3가지 경우에는 표기하지 않음
+
                 double x = entity.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX;
                 double y = entity.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY;
                 double z = entity.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ;
