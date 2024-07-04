@@ -1,10 +1,14 @@
 package com.mcmaximilian.Event;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GL11;
@@ -14,11 +18,6 @@ import static com.mcmaximilian.Keybinds.ESPState;
 public class WorldRenderEvent {
 
 
-    /**
-     * URL: https://github.com/vepexlegit/PlayerESP
-     * made box with EntityPosition
-     */
-    @SuppressWarnings("JavadocLinkAsPlainText")
     @SubscribeEvent
     public void worldRenderEvent( RenderWorldLastEvent event) {
 
@@ -47,65 +46,73 @@ public class WorldRenderEvent {
                 }
                 //TODO: 이 3가지 경우에는 표기하지 않음
 
-                double x = entity.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX;
-                double y = entity.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY;
-                double z = entity.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ;
                 GL11.glColor4f(0.0F, 1.0F, 0.0F, 1.0F);
-                GL11.glBegin(GL11.GL_LINE_LOOP);
-                GL11.glVertex3d(x - 0.5, y, z - 0.5);
-                GL11.glVertex3d(x - 0.5, y + 1.8, z - 0.5);
-                GL11.glVertex3d(x + 0.5, y + 1.8, z - 0.5);
-                GL11.glVertex3d(x + 0.5, y, z - 0.5);
-                GL11.glEnd();
-                GL11.glBegin(GL11.GL_LINE_LOOP);
-                GL11.glVertex3d(x - 0.5, y, z + 0.5);
-                GL11.glVertex3d(x - 0.5, y + 1.8, z + 0.5);
-                GL11.glVertex3d(x + 0.5, y + 1.8, z + 0.5);
-                GL11.glVertex3d(x + 0.5, y, z + 0.5);
-                GL11.glEnd();
-                GL11.glBegin(GL11.GL_LINES);
-                GL11.glVertex3d(x - 0.5, y, z - 0.5);
-                GL11.glVertex3d(x - 0.5, y, z + 0.5);
-                GL11.glVertex3d(x - 0.5, y + 1.8, z - 0.5);
-                GL11.glVertex3d(x - 0.5, y + 1.8, z + 0.5);
-                GL11.glVertex3d(x + 0.5, y + 1.8, z - 0.5);
-                GL11.glVertex3d(x + 0.5, y + 1.8, z + 0.5);
-                GL11.glVertex3d(x + 0.5, y, z - 0.5);
-                GL11.glVertex3d(x + 0.5, y, z + 0.5);
-                GL11.glEnd();
+
+                RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+                AxisAlignedBB boundingBox = entity.getEntityBoundingBox();
+
+                GlStateManager.enableBlend();
+                GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
+                        GL11.GL_ZERO);
+
+                GlStateManager.disableTexture2D();
+                GlStateManager.disableLighting();
+                GlStateManager.disableCull();
+                GlStateManager.disableDepth();
+
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);
+
+                AxisAlignedBB adjustedBoundingBox = new AxisAlignedBB(boundingBox.minX, boundingBox.minY, boundingBox.minZ,
+                        boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
+
+                RenderGlobal.drawSelectionBoundingBox(adjustedBoundingBox);
+
+                GlStateManager.popMatrix();
+
+                GlStateManager.enableDepth();
+                GlStateManager.enableCull();
+                GlStateManager.enableLighting();
+                GlStateManager.enableTexture2D();
+                GlStateManager.disableBlend();
             }
-            if ( entity instanceof EntityVillager) {
+            else if ( entity instanceof EntityVillager) {
                 continue;
             }
-            if ( ! (entity instanceof EntityLiving ) ) {
+            else if ( ! (entity instanceof EntityLiving ) ) {
                 continue;
             }
-            double x = entity.posX - Minecraft.getMinecraft().getRenderManager().viewerPosX;
-            double y = entity.posY - Minecraft.getMinecraft().getRenderManager().viewerPosY;
-            double z = entity.posZ - Minecraft.getMinecraft().getRenderManager().viewerPosZ;
+
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glBegin(GL11.GL_LINE_LOOP);
-            GL11.glVertex3d(x - 0.5, y, z - 0.5);
-            GL11.glVertex3d(x - 0.5, y + 1.8, z - 0.5);
-            GL11.glVertex3d(x + 0.5, y + 1.8, z - 0.5);
-            GL11.glVertex3d(x + 0.5, y, z - 0.5);
-            GL11.glEnd();
-            GL11.glBegin(GL11.GL_LINE_LOOP);
-            GL11.glVertex3d(x - 0.5, y, z + 0.5);
-            GL11.glVertex3d(x - 0.5, y + 1.8, z + 0.5);
-            GL11.glVertex3d(x + 0.5, y + 1.8, z + 0.5);
-            GL11.glVertex3d(x + 0.5, y, z + 0.5);
-            GL11.glEnd();
-            GL11.glBegin(GL11.GL_LINES);
-            GL11.glVertex3d(x - 0.5, y, z - 0.5);
-            GL11.glVertex3d(x - 0.5, y, z + 0.5);
-            GL11.glVertex3d(x - 0.5, y + 1.8, z - 0.5);
-            GL11.glVertex3d(x - 0.5, y + 1.8, z + 0.5);
-            GL11.glVertex3d(x + 0.5, y + 1.8, z - 0.5);
-            GL11.glVertex3d(x + 0.5, y + 1.8, z + 0.5);
-            GL11.glVertex3d(x + 0.5, y, z - 0.5);
-            GL11.glVertex3d(x + 0.5, y, z + 0.5);
-            GL11.glEnd();
+
+
+            RenderManager renderManager = Minecraft.getMinecraft().getRenderManager();
+            AxisAlignedBB boundingBox = entity.getEntityBoundingBox();
+
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE,
+                    GL11.GL_ZERO);
+
+            GlStateManager.disableTexture2D();
+            GlStateManager.disableLighting();
+            GlStateManager.disableCull();
+            GlStateManager.disableDepth();
+
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(-renderManager.viewerPosX, -renderManager.viewerPosY, -renderManager.viewerPosZ);
+
+            AxisAlignedBB adjustedBoundingBox = new AxisAlignedBB(boundingBox.minX, boundingBox.minY, boundingBox.minZ,
+                    boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ);
+
+            RenderGlobal.drawSelectionBoundingBox(adjustedBoundingBox);
+
+            GlStateManager.popMatrix();
+
+            GlStateManager.enableDepth();
+            GlStateManager.enableCull();
+            GlStateManager.enableLighting();
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
         }
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
