@@ -75,6 +75,7 @@ public class WorldRenderEvent {
                 GlStateManager.enableLighting();
                 GlStateManager.enableTexture2D();
                 GlStateManager.disableBlend();
+                return;
             }
             else if ( entity instanceof EntityVillager) {
                 continue;
