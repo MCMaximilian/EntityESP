@@ -1,7 +1,7 @@
 [
 {
   "modid": "EntityESP",
-  "name": "EntityESP 1.0",
+  "name": "EntityESP",
   "description": "EntityESP",
   "version": "${version}",
   "mcversion": "${mcversion}",
