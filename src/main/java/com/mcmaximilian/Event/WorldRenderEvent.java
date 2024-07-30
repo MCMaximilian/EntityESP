@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -75,14 +77,18 @@ public class WorldRenderEvent {
                 GlStateManager.enableLighting();
                 GlStateManager.enableTexture2D();
                 GlStateManager.disableBlend();
-                return;
+                continue;
             }
             else if ( entity instanceof EntityVillager) {
+                continue;
+            }
+            else if ( entity instanceof EntityArmorStand) {
                 continue;
             }
             else if ( ! (entity instanceof EntityLiving ) ) {
                 continue;
             }
+
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
