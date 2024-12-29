@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.BossStatus;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.passive.EntityVillager;
@@ -81,6 +82,9 @@ public class WorldRenderEvent {
                 continue;
             }
             else if ( entity instanceof EntityVillager) {
+                continue;
+            }
+            else if ( entity instanceof EntityWither ) {
                 continue;
             }
             else if ( ! (entity instanceof EntityLiving ) ) {
